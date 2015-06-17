@@ -1,10 +1,8 @@
 __author__ = 'sam.royston'
-from xml.dom import minidom
-from xml.etree.ElementTree import tostring, SubElement, ElementTree, Element
+
+from xml.etree.cElementTree import SubElement, ElementTree, Element
 from datetime import datetime
 import os
-
-
 
 class Node(object):
     def __init__(self, id, label = None, attributes=None, x=None, y=None, z=None, r=None, g=None, b=None, size=1):
@@ -33,6 +31,7 @@ class Edge(object):
         self.target = target
         self.attributes = attributes
 
+
 class Graph(object):
     def __init__(self, igraph_obj=None, layout=None):
         self.nodes = {}
@@ -60,43 +59,76 @@ class Graph(object):
         else:
             raise TypeError("nodes must be of type gexdat.Node")
 
-    def add_edge(self,edge):
+    def add_edge(self, edge):
         if edge.__class__ == Edge:
             self.edges.append(edge)
         else:
             raise TypeError("edges must be of type gexdat.Edge")
 
-
-    def write_gexf(self, filename, description="hungry", creator="hippo", edge_type='undirected', mode='static'):
-
+    def create_base_element(self, description="hungry", creator="hippo", edge_type='undirected', mode='static'):
         attributes = {"xmlns:viz":"http://www.gexf.net/1.2draft/viz"}
         root = Element("gexf", attrib=attributes)
         date = datetime.today().strftime("%m_%d_%y")
         meta = SubElement(root, "meta", lastmodifieddate=date)
-
         if description is not None:
-            desc = SubElement(meta,"description").text = description
+            SubElement(meta,"description").text = description
         if creator is not None:
-            cre = SubElement(meta,"creator").text = creator
+            SubElement(meta,"creator").text = creator
         graph = SubElement(root, "graph", defaultedgetype=edge_type, mode=mode)
-        nodes = SubElement(graph, "nodes")
+        return root, graph
 
-        for node_id in self.nodes.keys():
-            node = self.nodes[node_id]
-            gexf_node = SubElement(nodes, 'node', id=str(node.id), label=str(node.label))
+    def add_nodes_element(self, nodes):
+        """
+        make nodes xml element from nodes
+        """
+        nodes_el = Element("nodes")
+        for node_id in nodes.keys():
+            node = nodes[node_id]
+            gexf_node = SubElement(nodes_el, 'node', id=str(node.id), label=str(node.label))
             SubElement(gexf_node, 'attvalues')
             SubElement(gexf_node, 'viz:size', value=str(node.size))
             if node.has_position():
                 SubElement(gexf_node, 'viz:position', x=str(node.position[0]), y=str(node.position[1]), z=str(node.position[2]))
             if node.has_color():
                 SubElement(gexf_node, 'viz:color', r=str(node.color[0]), y=str(node.color[1]), z=str(node.color[2]))
+        return nodes_el
 
-        edges = SubElement(graph, "edges")
+    def add_edges_element(self, edges):
+        """
+        create xml element from edge list
+        """
+        edges = Element("edges")
         for edge in self.edges:
             gexf_edge = SubElement(edges,'edge', source=str(edge.source), target=str(edge.target))
             SubElement(gexf_edge, "attvalues")
+        return edges
+
+    def write_gexf(self, filename, ):
+        """
+        writes the graph in gexf format to file with no modifications to the object
+        """
+        root, graph = self.create_base_element()
+
+        self.add_nodes_element(self.nodes)
+        self.add_edges_element(self.edges)
 
         tree = ElementTree(root)
         print "saved to: " + os.getcwd() + '/' + filename
         tree.write(os.getcwd() + '/' + filename)
 
+class TimeShift(object):
+    def __init__(self, graphs = None, xml = None):
+        self.graphs = graphs
+        self.xml = self.xml_from_graphs(graphs)
+        self.edge_dict = {}
+    def assimilate_graph(self, graph):
+        pass
+
+    def xml_from_graphs(self, graphs):
+        root = Graph.create_base_element()
+        pass
+
+    def write_fused_gexf(self, filename):
+        tree = ElementTree(self.xml)
+
+        self.xml.write(os.getcwd() + '/' + filename)
