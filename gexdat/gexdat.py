@@ -15,7 +15,7 @@ class Node(object):
         self.position = [x,y,z]
         self.color = [r,g,b]
         if not self.has_color():
-            self.color =
+            self.color = [200,200,200]
         self.size = size
 
     def has_position(self):
