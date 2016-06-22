@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "gexdat",
-    version = "0.1",
+    version = "0.2",
     author = "Sam Royston",
     author_email = "sfoxroyston@gmail.com",
     description = ("An easy way to write gephi style gexf graph files"),
