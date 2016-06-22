@@ -17,7 +17,7 @@ setup(
     license = "MIT",
     keywords = "gexdat",
     url = "https://github.com/PorkShoulderHolder/gexdat",
-    download_url = "https://github.com/PorkShoulderHolder/gexdat/tarball/0.1",
+    download_url = "https://github.com/PorkShoulderHolder/gexdat/tarball/0.2",
     packages=['gexdat'],
     long_description=read('README.md'),
     classifiers=[
