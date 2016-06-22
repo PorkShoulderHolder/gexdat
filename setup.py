@@ -14,13 +14,14 @@ setup(
     author = "Sam Royston",
     author_email = "sfoxroyston@gmail.com",
     description = ("An easy way to write gephi style gexf graph files"),
-    license = "BSD",
+    license = "MIT",
     keywords = "gexdat",
-    url = "http://packages.python.org/an_example_pypi_project",
+    url = "https://github.com/PorkShoulderHolder/gexdat",
+    download_url = "https://github.com/PorkShoulderHolder/gexdat/tarball/0.1",
     packages=['gexdat'],
     long_description=read('README.md'),
     classifiers=[
         "Topic :: Utilities",
-        "License :: OSI Approved :: BSD License",
+        "License :: MIT License",
     ],
 )
