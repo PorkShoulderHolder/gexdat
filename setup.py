@@ -21,7 +21,6 @@ setup(
     packages=['gexdat'],
     long_description=read('README.md'),
     classifiers=[
-        "Topic :: Utilities",
-        "License :: MIT License",
+        "Topic :: Utilities"        
     ],
 )
